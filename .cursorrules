@@ -1,0 +1,9 @@
+# Task Manager Project Rules
+- Use React functional components with hooks
+- Follow component-based architecture principles
+- Implement responsive design with Tailwind CSS
+- Use TypeScript for type safety
+- Follow REST API conventions
+- Implement proper error handling
+- Use consistent naming conventions
+- Write clean, readable code with proper comments
