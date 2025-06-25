@@ -16,9 +16,34 @@ dotenv.config();
 const app: Application = express();
 const PORT = process.env.PORT || 3000;
 
+// CORS configuration
+const allowedOrigins = [
+  'http://localhost:8080',
+  'http://localhost:3000',
+  'http://localhost:5173',
+  'https://*.vercel.app',
+  'https://*.netlify.app',
+  process.env.FRONTEND_URL // Allow custom frontend URL from environment
+].filter(Boolean) as string[];
+
 // Middleware
 app.use(cors({
-  origin: 'http://localhost:8080',
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.some(allowedOrigin => {
+      if (allowedOrigin && allowedOrigin.includes('*')) {
+        return origin.includes(allowedOrigin.replace('*.', ''));
+      }
+      return origin === allowedOrigin;
+    })) {
+      callback(null, true);
+    } else {
+      console.log('CORS blocked origin:', origin);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
 }));
 app.use(express.json());
